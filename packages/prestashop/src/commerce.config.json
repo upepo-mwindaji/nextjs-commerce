@@ -1,7 +1,7 @@
 {
-  "provider": "bigcommerce",
+  "provider": "prestashop",
   "features": {
-    "wishlist": true,
-    "customerAuth": true
+    "wishlist": false,
+    "customerAuth": false
   }
 }
