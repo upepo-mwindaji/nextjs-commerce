@@ -1,8 +1,8 @@
-import type { BigcommerceConfig } from '../index'
-import { BigcommerceApiError, BigcommerceNetworkError } from './errors'
+import type { PrestashopConfig } from '../index'
+import { PrestashopApiError, PrestashopNetworkError } from './errors'
 
 const fetchStoreApi =
-  <T>(getConfig: () => BigcommerceConfig) =>
+  <T>(getConfig: () => PrestashopConfig) =>
   async (
     endpoint: string,
     options?: {
@@ -20,13 +20,13 @@ const fetchStoreApi =
         headers: {
           ...options?.headers,
           'Content-Type': 'application/json',
-          'X-Auth-Token': config.storeApiToken,
-          'X-Auth-Client': config.storeApiClientId,
+          // 'X-Auth-Token': config.storeApiToken,
+          // 'X-Auth-Client': config.storeApiClientId,
         },
       })
     } catch (error: any) {
-      throw new BigcommerceNetworkError(
-        `Fetch to Bigcommerce failed: ${error.message}`
+      throw new PrestashopNetworkError(
+        `Fetch to Prestashop failed: ${error.message}`
       )
     }
 
@@ -36,18 +36,18 @@ const fetchStoreApi =
     if (!res.ok) {
       const data = isJSON ? await res.json() : await getTextOrNull(res)
       const headers = getRawHeaders(res)
-      const msg = `Big Commerce API error (${
+      const msg = `Prestashop API error (${
         res.status
       }) \nHeaders: ${JSON.stringify(headers, null, 2)}\n${
         typeof data === 'string' ? data : JSON.stringify(data, null, 2)
       }`
 
-      throw new BigcommerceApiError(msg, res, data)
+      throw new PrestashopApiError(msg, res, data)
     }
 
     if (res.status !== 204 && !isJSON) {
-      throw new BigcommerceApiError(
-        `Fetch to Bigcommerce API failed, expected JSON content but found: ${contentType}`,
+      throw new PrestashopApiError(
+        `Fetch to Prestashop API failed, expected JSON content but found: ${contentType}`,
         res
       )
     }
